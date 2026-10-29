@@ -1,203 +1,229 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Growth Resource Organizer</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main page: title and vertically stacked navigation buttons -->
+    <main class="home-page">
+      <h1 class="home-title">Growth Resource Organizer</h1>
 
-    <button data-modal-target="#new-item-modal">New Resource Item</button> <!--data-modal-target needs to be specific to every button-->
-    <div class="modal" id="new-item-modal">
-        <div class="modal-header">
-            <div class="title">Input New Crafting Item</div>
-            <button data-close-button class="close-button">&times;</button> <!--Times always scales the button-->
-        </div>
-        <div class="modal-body">
-            <label for="item-name">Item Name:</label>
-            <input type="text" id="item-name">
-            <br>
-            <div class ="resource-picker"> <!--Template for selecting resources, expand on this when making recipe with number of resources-->
-                <label for="resourceSelect">Select Resource:</label>
-
-                <select id="resourceSelect"></select>
-                <button type="button" id="addResource">
-                    + Add
-                </button>
-
-                <div id="selectedResources"></div>
-
-            </div>
-
-            <br>
-            <input type="submit" id="resource-submit">
-            <p id="resource-success" class="success-message">
-                Item saved successfully!
-            </p>
-
-        </div>
-    </div>
-
-     <button data-modal-target="#resource-table-modal">Table Of Resources</button> <!--data-modal-target needs to be specific to every button-->
-    <div class="modal table-modal" id="resource-table-modal">
-        <div class="modal-header">
-    <div class="title">Table Of Resources:</div>
-
-    <div class="modal-header-actions">
-        <button data-modal-target="#new-item-modal">
-            + Add Item
+      <nav class="home-menu" aria-label="Main actions">
+        <button
+          type="button"
+          class="home-button"
+          data-modal-target="#resource-table-modal"
+        >
+          Table of Resources
+        </button>
+        <button
+          type="button"
+          class="home-button"
+          data-modal-target="#recipe-table-modal"
+        >
+          Table of Recipes
         </button>
 
-                <button data-close-button class="close-button">
-                &times;
-                </button>
-            </div>
+        <div class="home-menu-utilities">
+          <button type="button" class="home-button" id="import-data">
+            Import JSON
+          </button>
+          <button type="button" class="home-button" id="export-data">
+            Export JSON
+          </button>
         </div>
-        <div class="modal-body">
-            <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Resource Name</th>
-                        <th>Ingredients</th> 
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody id="resTable">
-                </tbody>
-            </table>
-            </div>
+      </nav>
+
+      <!-- File input remains hidden; index.js uses its original ID. -->
+      <input
+        type="file"
+        id="import-file"
+        accept=".json,application/json"
+        hidden
+      />
+    </main>
+
+    <!-- Existing modals below: their markup and IDs are unchanged. -->
+    <div class="modal" id="new-item-modal">
+      <div class="modal-header">
+        <div class="title">Input New Crafting Item</div>
+        <button data-close-button class="close-button">&times;</button>
+        <!--Times always scales the button-->
+      </div>
+      <div class="modal-body">
+        <label for="item-name">Item Name:</label>
+        <input type="text" id="item-name" />
+        <br />
+        <div class="resource-picker">
+          <!--Template for selecting resources, expand on this when making recipe with number of resources-->
+          <label for="resourceSelect">Select Resource:</label>
+
+          <select id="resourceSelect"></select>
+          <button type="button" id="addResource">+ Add</button>
+          <button type="button" id="addUnknown">+ Add ???</button>
+
+          <div id="selectedResources"></div>
         </div>
+
+        <br />
+        <input type="submit" id="resource-submit" />
+        <p id="resource-success" class="success-message">
+          Item saved successfully!
+        </p>
+      </div>
     </div>
 
-    <br>
+    <div class="modal table-modal" id="resource-table-modal">
+      <div class="modal-header">
+        <div class="title">Table Of Resources:</div>
 
-    <button data-modal-target="#recipe-table-modal">
-    Table of Recipes
-</button>
+        <div class="modal-header-actions">
+          <button data-modal-target="#new-item-modal">+ Add Item</button>
+          <button data-close-button class="close-button">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Resource Name</th>
+                <th>Ingredients</th>
+                <th>Edit</th>
+                <th>Amount</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody id="resTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-<div class="modal table-modal" id="recipe-table-modal">
-
-    <div class="modal-header">
+    <div class="modal table-modal" id="recipe-table-modal">
+      <div class="modal-header">
         <div class="title">Table of Recipes:</div>
 
         <div class="modal-header-actions">
-            <button type="button" data-modal-target="#new-recipe-modal">
-                + Add Recipe
-            </button>
+          <button type="button" data-modal-target="#new-recipe-modal">
+            + Add Recipe
+          </button>
 
-            <button data-close-button class="close-button">
-                &times;
-            </button>
+          <button data-close-button class="close-button">&times;</button>
         </div>
-    </div>
+      </div>
 
-    <div class="modal-body">
+      <div class="modal-body">
         <div class="table-container">
-            <table class="data-table recipe-data-table">
-                <thead>
-                    <tr>
-                        <th>Recipe Name</th>
-                        <th>Ingredients</th>
-                        <th>Info</th>
-                        <th>Crafted</th>
-                        <th>Craftable</th>
-                    </tr>
-                </thead>
+          <table class="data-table recipe-data-table">
+            <thead>
+              <tr>
+                <th>Recipe Name</th>
+                <th>Ingredients</th>
+                <th>Info</th>
+                <th>Crafted</th>
+                <th>Craftable</th>
+              </tr>
+            </thead>
 
-                <tbody id="recipeTable">
-                </tbody>
-            </table>
+            <tbody id="recipeTable"></tbody>
+          </table>
         </div>
-    </div>
-</div>
-
-<div class="modal" id="recipe-info-modal">
-
-    <div class="modal-header">
-        <div class="title" id="recipe-info-title">
-            Recipe Information
-        </div>
-
-        <button data-close-button class="close-button">
-            &times;
-        </button>
+      </div>
     </div>
 
-    <div class="modal-body">
+    <div class="modal" id="recipe-info-modal">
+      <div class="modal-header">
+        <div class="title" id="recipe-info-title">Recipe Information</div>
 
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+
+      <div class="modal-body">
         <p id="recipe-info-description"></p>
 
         <div class="recipe-info-actions">
-            <button type="button" id="recipe-edit-button">
-                Edit
-            </button>
+          <button type="button" id="recipe-edit-button">Edit</button>
 
-            <button type="button" id="recipe-delete-button">
-                Delete
-            </button>
+          <button type="button" id="recipe-delete-button">Delete</button>
         </div>
-
+      </div>
     </div>
-</div>
 
-   <div class="modal recipe-form-modal" id="new-recipe-modal">
-    <div class="modal-header">
+    <div class="modal recipe-form-modal" id="new-recipe-modal">
+      <div class="modal-header">
         <div class="title">Input New Recipe</div>
         <button data-close-button class="close-button">&times;</button>
-    </div>
+      </div>
 
-    <div class="modal-body">
-
+      <div class="modal-body">
         <!-- Recipe name -->
         <div class="recipe-field">
-            <label for="recipe-name">Recipe Name:</label>
-            <input type="text" id="recipe-name">
+          <label for="recipe-name">Recipe Name:</label>
+          <input type="text" id="recipe-name" />
+        </div>
+        <div class="recipe-field">
+          <label>
+            <input type="checkbox" id="recipe-repeatable" />
+            Can be crafted multiple times
+          </label>
+        </div>
+
+        <!-- Normal recipes: Yes or No -->
+        <div class="recipe-field" id="recipe-crafted-once-field">
+          <label>
+            <input type="checkbox" id="recipe-crafted" />
+            Already crafted
+          </label>
+        </div>
+
+        <!-- Repeatable recipes: number of completed crafts -->
+        <div class="recipe-field" id="recipe-crafted-count-field" hidden>
+          <label for="recipe-crafted-count"> Times crafted: </label>
+
+          <input
+            type="number"
+            id="recipe-crafted-count"
+            min="0"
+            step="1"
+            value="0"
+          />
         </div>
 
         <!-- Ingredients -->
         <div class="recipe-field">
-            <label for="recipe-resource-select">Ingredients:</label>
+          <label for="recipe-resource-select">Ingredients:</label>
 
-            <div class="recipe-ingredient-row">
-                <select id="recipe-resource-select"></select>
+          <div class="recipe-ingredient-row">
+            <select id="recipe-resource-select"></select>
 
-                <input type="number" id="recipe-quantity"
-                       min="1" step="1" value="1">
+            <input
+              type="number"
+              id="recipe-quantity"
+              min="1"
+              step="1"
+              value="1"
+            />
 
-                <button type="button" id="recipe-add-resource">
-                    + Add
-                </button>
-            </div>
+            <button type="button" id="recipe-add-resource">+ Add</button>
+          </div>
 
-            <div id="recipe-selected-ingredients"></div>
+          <div id="recipe-selected-ingredients"></div>
         </div>
 
         <!-- Description -->
         <div class="recipe-field">
-            <label for="recipe-description">Description:</label>
-            <textarea id="recipe-description" rows="4"></textarea>
+          <label for="recipe-description">Description:</label>
+          <textarea id="recipe-description" rows="4"></textarea>
         </div>
 
-        <!-- Crafted -->
-        <div class="recipe-field">
-            <label>
-                <input type="checkbox" id="recipe-crafted">
-                Already crafted
-            </label>
-        </div>
-
-        <button type="button" id="recipe-submit">
-            Submit Recipe
-        </button>
-
+        <button type="button" id="recipe-submit">Submit Recipe</button>
+      </div>
     </div>
-</div>
     <div id="overlay"></div>
-    <h1 id ="myH1"></h1>
-    <p style ="font-size: 7px" id ="myP"></p>
     <script src="index.js"></script>
-</body>
+  </body>
 </html>
