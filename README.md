@@ -2,6 +2,8 @@
 
 A browser-based resource and crafting manager for a custom tabletop RPG. Built with **HTML, CSS, and vanilla JavaScript**, the app helps players organize magical ingredients, track inventory, manage recipes, and check which recipes they can currently craft.
 
+![RPG Crafting Organizer Main Menu](images/main-menu.jpg)
+
 ## Features
 
 ### Ingredient and inventory management
@@ -146,3 +148,15 @@ The current app checks crafting availability but does **not** automatically perf
 Make managing a custom RPG's magical crafting system easier by showing what players own, what recipes require, and what can be crafted **without accidentally assigning the same ingredient to multiple requirements**.
 
 Allow access through website rather than local host only.
+
+
+## Screenshots
+
+### Main Menu
+![RPG Crafting Organizer Main Menu](images/main-menu.jpg)
+
+### Resource Inventory
+![Resource Inventory](images/resource-table.jpg)
+
+### Crafting Recipes
+![Recipe Craftability Table](images/recipe-table.jpg)
