@@ -1,0 +1,22 @@
+{
+  "name": "rpg-resource-manager",
+  "version": "1.0.0",
+  "description": "A browser-based resource and crafting manager for a custom tabletop RPG. Built with **HTML, CSS, and vanilla JavaScript**, the app helps players organize magical ingredients, track inventory, manage recipes, and check which recipes they can currently craft.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AliceGe4/rpg-resource-manager.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AliceGe4/rpg-resource-manager/issues"
+  },
+  "homepage": "https://github.com/AliceGe4/rpg-resource-manager#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

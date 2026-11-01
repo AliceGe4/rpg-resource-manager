@@ -1,0 +1,17 @@
+# Node.js installed dependencies
+node_modules/
+
+# Shared inventory data
+/data.json
+/data.json.tmp
+
+# Environment configuration
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

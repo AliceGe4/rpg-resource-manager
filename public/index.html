@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Growth Resource Organizer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main page: title and vertically stacked navigation buttons -->
+    <main class="home-page">
+      <h1 class="home-title">Growth Resource Organizer</h1>
+
+      <nav class="home-menu" aria-label="Main actions">
+        <button
+          type="button"
+          class="home-button"
+          data-modal-target="#resource-table-modal"
+        >
+          Table of Resources
+        </button>
+        <button
+          type="button"
+          class="home-button"
+          data-modal-target="#recipe-table-modal"
+        >
+          Table of Recipes
+        </button>
+
+        <div class="home-menu-utilities">
+          <button type="button" class="home-button" id="import-data">
+            Import JSON
+          </button>
+          <button type="button" class="home-button" id="export-data">
+            Export JSON
+          </button>
+        </div>
+      </nav>
+
+      <!-- File input remains hidden; index.js uses its original ID. -->
+      <input
+        type="file"
+        id="import-file"
+        accept=".json,application/json"
+        hidden
+      />
+    </main>
+
+    <!-- Crafting item form: isolated layout styling; original JavaScript IDs preserved. -->
+    <div class="modal item-form-modal" id="new-item-modal">
+      <div class="modal-header">
+        <div class="title">Input New Crafting Item</div>
+        <button
+          type="button"
+          data-close-button
+          class="close-button"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body item-form-body">
+        <!-- Item name -->
+        <div class="item-field">
+          <label for="item-name">Item Name</label>
+          <input type="text" id="item-name" placeholder="Enter item name..." />
+        </div>
+
+        <!-- Item attributes -->
+        <div class="item-field resource-picker">
+          <div class="item-section-title">Resource Attributes</div>
+
+          <div class="item-select-field">
+            <label for="resourceSelect">Select Resource</label>
+            <select id="resourceSelect"></select>
+          </div>
+
+          <div class="item-add-actions">
+            <button type="button" id="addResource">+ Add Resource</button>
+            <button type="button" id="addUnknown">+ Add ???</button>
+          </div>
+
+          <!-- Selected resource chips created by index.js -->
+          <div id="selectedResources"></div>
+        </div>
+
+        <div class="item-form-footer">
+          <input type="submit" id="resource-submit" value="Save Item" />
+          <p id="resource-success" class="success-message">
+            Item saved successfully!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal table-modal" id="resource-table-modal">
+      <div class="modal-header">
+        <div class="title">Table Of Resources:</div>
+
+        <div class="modal-header-actions">
+          <button data-modal-target="#new-item-modal">+ Add Item</button>
+          <button data-close-button class="close-button">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="mobile-sort-controls" data-sort-table="resTable">
+          <label for="resource-mobile-sort">Sort by:</label>
+
+          <select id="resource-mobile-sort" class="mobile-sort-select">
+            <option value="" selected disabled>Select sorting...</option>
+            <option value="name">Resource Name</option>
+            <option value="amount">Amount</option>
+          </select>
+
+          <button
+            type="button"
+            class="mobile-sort-direction"
+            aria-label="Reverse sort direction"
+            disabled
+          >
+            ↑
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-header"
+                    data-sort-table="resTable"
+                    data-sort-key="name"
+                  >
+                    Resource Name <span class="sort-arrow">↕</span>
+                  </button>
+                </th>
+                <th>Ingredients</th>
+                <th>Edit</th>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-header"
+                    data-sort-table="resTable"
+                    data-sort-key="amount"
+                  >
+                    Amount <span class="sort-arrow">↕</span>
+                  </button>
+                </th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody id="resTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal table-modal" id="recipe-table-modal">
+      <div class="modal-header">
+        <div class="title">Table of Recipes:</div>
+
+        <div class="modal-header-actions">
+          <button type="button" data-modal-target="#new-recipe-modal">
+            + Add Recipe
+          </button>
+
+          <button data-close-button class="close-button">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="mobile-sort-controls" data-sort-table="recipeTable">
+          <label for="recipe-mobile-sort">Sort by:</label>
+
+          <select id="recipe-mobile-sort" class="mobile-sort-select">
+            <option value="" selected disabled>Select sorting...</option>
+            <option value="name">Recipe Name</option>
+            <option value="crafted">Crafted</option>
+            <option value="craftable">Craftable</option>
+          </select>
+
+          <button
+            type="button"
+            class="mobile-sort-direction"
+            aria-label="Reverse sort direction"
+            disabled
+          >
+            ↑
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="data-table recipe-data-table">
+            <thead>
+              <tr>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-header"
+                    data-sort-table="recipeTable"
+                    data-sort-key="name"
+                  >
+                    Recipe Name <span class="sort-arrow">↕</span>
+                  </button>
+                </th>
+                <th>Ingredients</th>
+                <th>Info</th>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-header"
+                    data-sort-table="recipeTable"
+                    data-sort-key="crafted"
+                  >
+                    Crafted <span class="sort-arrow">↕</span>
+                  </button>
+                </th>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-header"
+                    data-sort-table="recipeTable"
+                    data-sort-key="craftable"
+                  >
+                    Craftable <span class="sort-arrow">↕</span>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody id="recipeTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="recipe-info-modal">
+      <div class="modal-header">
+        <div class="title" id="recipe-info-title">Recipe Information</div>
+
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p id="recipe-info-description"></p>
+
+        <div class="recipe-info-actions">
+          <button type="button" id="recipe-edit-button">Edit</button>
+
+          <button type="button" id="recipe-delete-button">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal recipe-form-modal" id="new-recipe-modal">
+      <div class="modal-header">
+        <div class="title">Input New Recipe</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Recipe name -->
+        <div class="recipe-field">
+          <label for="recipe-name">Recipe Name:</label>
+          <input type="text" id="recipe-name" />
+        </div>
+        <div class="recipe-field">
+          <label>
+            <input type="checkbox" id="recipe-repeatable" />
+            Can be crafted multiple times
+          </label>
+        </div>
+
+        <!-- Normal recipes: Yes or No -->
+        <div class="recipe-field" id="recipe-crafted-once-field">
+          <label>
+            <input type="checkbox" id="recipe-crafted" />
+            Already crafted
+          </label>
+        </div>
+
+        <!-- Repeatable recipes: number of completed crafts -->
+        <div class="recipe-field" id="recipe-crafted-count-field" hidden>
+          <label for="recipe-crafted-count"> Times crafted: </label>
+
+          <input
+            type="number"
+            id="recipe-crafted-count"
+            min="0"
+            step="1"
+            value="0"
+          />
+        </div>
+
+        <!-- Ingredients -->
+        <div class="recipe-field">
+          <label for="recipe-resource-select">Ingredients:</label>
+
+          <div class="recipe-ingredient-row">
+            <select id="recipe-resource-select"></select>
+
+            <input
+              type="number"
+              id="recipe-quantity"
+              min="1"
+              step="1"
+              value="1"
+            />
+
+            <button type="button" id="recipe-add-resource">+ Add</button>
+          </div>
+
+          <div class="recipe-alternative-field">
+            <label for="recipe-alternative-resource-select">
+              OR Resource <span>(Optional)</span>
+            </label>
+            <select id="recipe-alternative-resource-select">
+              <option value="">No alternative</option>
+            </select>
+          </div>
+
+          <div id="recipe-selected-ingredients"></div>
+        </div>
+
+        <!-- Description -->
+        <div class="recipe-field">
+          <label for="recipe-description">Description:</label>
+          <textarea id="recipe-description" rows="4"></textarea>
+        </div>
+
+        <button type="button" id="recipe-submit">Submit Recipe</button>
+      </div>
+    </div>
+    <!-- ===== Craftable Recipe Combinations ===== -->
+    <div class="modal combination-modal" id="craftable-combinations-modal">
+      <div class="modal-header">
+        <div class="title">Available Crafting Combinations</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="combination-recipe-label">
+          Recipe: <strong id="craftable-recipe-name"></strong>
+        </p>
+
+        <p>Select a combination to craft this recipe:</p>
+
+        <!-- We will populate this with JavaScript later -->
+        <div class="combination-list" id="craftable-combinations-list">
+          <!-- Temporary example -->
+          <div class="combination-row">
+            <label class="combination-choice">
+              <input type="radio" name="chosen-combination" disabled />
+
+              <span>
+                <strong>Combination 1</strong>
+                <small>Items used will appear here</small>
+              </span>
+            </label>
+
+            <button type="button" class="craft-action" disabled>Craft</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Uncraftable Recipe Combinations ===== -->
+    <div class="modal combination-modal" id="uncraftable-combinations-modal">
+      <div class="modal-header">
+        <div class="title">Closest Crafting Combinations</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="combination-recipe-label">
+          Recipe: <strong id="uncraftable-recipe-name"></strong>
+        </p>
+
+        <p>Closest available combinations:</p>
+
+        <!-- We will populate this with JavaScript later -->
+        <div class="combination-list" id="uncraftable-combinations-list">
+          <!-- Temporary example -->
+          <div class="combination-row">
+            <div class="combination-details">
+              <strong>Closest Combination 1</strong>
+              <span>Available items will appear here</span>
+              <span class="combination-missing">
+                Missing resources will appear here
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Used when no items can contribute to the recipe -->
+        <p id="no-starting-items-message" hidden>
+          No available items can contribute to this recipe.
+        </p>
+      </div>
+    </div>
+    <div id="overlay"></div>
+    <script src="index.js"></script>
+  </body>
+</html>
