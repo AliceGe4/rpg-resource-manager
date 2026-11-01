@@ -4,6 +4,11 @@ A responsive, browser-based crafting and inventory manager built for a homebrew 
 
 Built with **HTML, CSS, vanilla JavaScript, Node.js, and Express**. Designed to run on a trusted local network so players can use the same shared inventory from a computer, tablet, or phone.
 
+##
+Video demonstration:
+
+https://lnkd.in/p/d8bJyKTa
+
 ## Features
 
 ### Resource and inventory management
